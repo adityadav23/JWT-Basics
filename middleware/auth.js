@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken')
-const CustomAPIError = require('../errors/custom-error')
-require('dotenv').config()
+const {UnauthenticatedError} = require('../errors')
+
 const authMiddleware = async(req, res, next)=>{
     const authHeader = req.headers.authorization
 
     //validating authHeader
     if(!authHeader || !authHeader.startsWith('Bearer ')){
-        throw new CustomAPIError('No token provided',401)
+        throw new UnauthenticatedError('No token provided')
     }
 
     //fetch token from authHeader
@@ -20,7 +20,8 @@ const authMiddleware = async(req, res, next)=>{
     next()
     }
    catch(error){
-    throw new CustomAPIError('Not authorized to access this route',401)
+    throw new UnauthenticatedError('Not authorized to access this route')
+
     }
 
 }
